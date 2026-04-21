@@ -1,0 +1,12 @@
+{
+    "agents": [
+        "claude_code"
+    ],
+    "skills": [
+        "fortify-development",
+        "laravel-best-practices",
+        "fluxui-development",
+        "livewire-development",
+        "tailwindcss-development"
+    ]
+}
