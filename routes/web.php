@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\MpesaCallbackController;
 use App\Livewire\Categories;
 use App\Livewire\BudgetList;
 use App\Livewire\BudgetForm;
@@ -35,6 +35,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('wallet/goals', SavingsGoals::class)->name('wallet.goals');
     Route::get('wallet/withdraw', WithdrawFunds::class)->name('wallet.withdraw');
     Route::get('wallet/transactions', TransactionHistory::class)->name('wallet.transactions');
-});
+    Route::post('mpesa/callback/stk', [MpesaCallbackController::class, 'stk'])
+    ->name('mpesa.callback.stk');
+
+    });
 
 require __DIR__.'/settings.php';

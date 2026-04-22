@@ -26,8 +26,8 @@ class ExpenseList extends Component{
         if (empty ($this->startDate)) {
             $this->startDate = now()->startOfMonth()->format("Y-m-d");
         }
-        if (empty ($this->startDate)) {
-            $this->startDate = now()->endOfMonth()->format("Y-m-d");
+        if (empty ($this->endDate)) {
+            $this->endDate = now()->endOfMonth()->format("Y-m-d");
         }
     }
 
@@ -58,8 +58,10 @@ class ExpenseList extends Component{
 
         //apply search and filters
         if ($this->search) {
-            $query->where('title', 'like','%'.$this->search.'%')
-            ->orWhere('description', 'like','%'.$this->search.'%');
+             $query->where(function ($query) {
+            $query->where('title', 'like', '%' . $this->search . '%')
+          ->orWhere('description', 'like', '%' . $this->search . '%');
+        });
         }
         if ($this->selectedCategory) {
             $query->where('category_id', $this->selectedCategory);
@@ -79,8 +81,10 @@ class ExpenseList extends Component{
         $query= Expense::forUser(Auth::user()->id);
         //apply search and filters
         if ($this->search) {
+             $query->where(function ($query) {
             $query->where('title', 'like','%'.$this->search.'%')
             ->orWhere('description', 'like','%'.$this->search.'%');
+        });
         }
         if ($this->selectedCategory) {
             $query->where('category_id', $this->selectedCategory);

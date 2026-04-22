@@ -88,9 +88,9 @@
             </div>
 
             <!-- Overall Progress Bar -->
-            <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-4">
+             <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-4">
                 <div class="h-4 rounded-full transition-all duration-300 {{ $overallPercentage > 100 ? 'bg-red-500' : ($overallPercentage > 90 ? 'bg-orange-500' : ($overallPercentage > 80 ? 'bg-yellow-500' : 'bg-green-500')) }}"
-                    @style(['width: ' . min($overallPercentage, 100) . ' %'])></div>
+                    style="width: {{ min($overallPercentage, 100) }}%"></div>
             </div>
         </div>
 
@@ -161,10 +161,10 @@
                                 {{ number_format($budget->percentage, 1) }}%
                             </span>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-3">
-                            <div class="h-3 rounded-full transition-all duration-300 {{ $budget->percentage > 100 ? 'bg-red-500' : ($budget->percentage > 90 ? 'bg-orange-500' : ($budget->percentage > 80 ? 'bg-yellow-500' : 'bg-green-500')) }}"
-                                @style(['width: ' . min($budget->percentage, 100) . ' %'])></div>
-                        </div>
+                         <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="h-3 rounded-full transition-all duration-300 {{ $budget->percentage > 100 ? 'bg-red-500' : ($budget->percentage > 90 ? 'bg-orange-500' : ($budget->percentage > 80 ? 'bg-yellow-500' : 'bg-green-500')) }}"
+                                        style="width: {{ min($budget->percentage, 100) }}%"></div>
+                                </div>
                     </div>
 
                     <!-- Stats -->

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,12 +34,15 @@ class Budget extends Model
 
   public function getSpentAmount(): float
     {
+        $query = Expense::where('user_id', $this->user_id)
+            ->whereMonth('date', $this->month)
+            ->whereYear('date', $this->year);
         if($this->category_id){
-            return $this->category->getTotalSpentForMonth($this->month, $this->year);
+            $query->where('category_id', $this->category_id);
+        }else{
+            $query->whereNull('category_id');
         }
-        return Expense::forUser($this->user_id)
-            ->inMonth($this->month, $this->year)
-            ->sum('amount');
+        return $query->sum('amount');
     }
 
 

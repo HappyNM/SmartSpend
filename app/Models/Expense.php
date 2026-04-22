@@ -100,7 +100,7 @@ class Expense extends Model
         return true;
     }
 
-     public function getNextOccurrenceDate(): ?\Carbon\Carbon
+     public function getNextOccurrenceDate(): ?\Carbon\CarbonInterface
     {
         if (!$this->isRecurring()) {
             return null;
