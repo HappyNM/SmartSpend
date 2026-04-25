@@ -17,23 +17,24 @@ class Categories extends Component
     public $isEditing = false;
 
      public $colors = [
-        '#EF4444', // Red
-        '#F97316', // Orange
-        '#F59E0B', // Amber
-        '#EAB308', // Yellow
-        '#84CC16', // Lime
-        '#22C55E', // Green
-        '#10B981', // Emerald
-        '#14B8A6', // Teal
-        '#06B6D4', // Cyan
-        '#0EA5E9', // Sky
-        '#3B82F6', // Blue
-        '#6366F1', // Indigo
-        '#8B5CF6', // Violet
-        '#A855F7', // Purple
-        '#D946EF', // Fuchsia
-        '#EC4899', // Pink
-        '#F43F5E', // Rose
+        
+'#B86B6B', // Red
+'#B88563', // Orange
+'#B89E68', // Amber
+'#B8A855', // Yellow
+'#98A866', // Lime
+'#6B9978', // Green
+'#6BA895', // Emerald
+'#6BA89C', // Teal
+'#6BA8B8', // Cyan
+'#7A9BB8', // Sky
+'#8B8FB8', // Blue
+'#9B8FB8', // Indigo
+'#A689B8', // Violet
+'#B089B8', // Purple
+'#B367B8', // Fuchsia
+'#B88FA8', // Pink
+'#B88888', // Rose
     ];
 
     protected function rules(){

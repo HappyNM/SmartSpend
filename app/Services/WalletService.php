@@ -4,8 +4,11 @@ namespace App\Services;
 
 use App\Models\MpesaDeposit;
 use App\Models\SavingsGoal;
+use App\Models\User;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
+use App\Notifications\FundsLockedNotification;
+use App\Notifications\WalletWithdrawalNotification;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
@@ -120,6 +123,20 @@ class WalletService
                 'related_id' => $goal->id,
                 'processed_at' => now(),
             ]);
+
+            DB::afterCommit(function () use ($userId, $amount, $goal): void {
+                $user = User::find($userId);
+
+                if (! $user) {
+                    return;
+                }
+
+                $user->notify(new FundsLockedNotification(
+                    $amount,
+                    (string) $goal->lock_type,
+                    (string) $goal->name
+                ));
+            });
         });
     }
 
@@ -151,6 +168,19 @@ class WalletService
                 'source' => 'user',
                 'processed_at' => now(),
             ]);
+
+            DB::afterCommit(function () use ($userId, $amount): void {
+                $user = User::find($userId);
+
+                if (! $user) {
+                    return;
+                }
+
+                $user->notify(new WalletWithdrawalNotification(
+                    $amount,
+                    'available balance'
+                ));
+            });
         });
     }
 
@@ -175,6 +205,7 @@ class WalletService
             $goal->current_amount = (float) $goal->current_amount - $amount;
             $goal->save();
 
+            $wallet->available_balance = (float) $wallet->available_balance + $amount;
             $wallet->locked_balance = (float) $wallet->locked_balance - $amount;
             $wallet->last_activity_at = now();
             $wallet->save();
@@ -192,6 +223,19 @@ class WalletService
                 'related_id' => $goal->id,
                 'processed_at' => now(),
             ]);
+
+            DB::afterCommit(function () use ($userId, $amount, $goal): void {
+                $user = User::find($userId);
+
+                if (! $user) {
+                    return;
+                }
+
+                $user->notify(new WalletWithdrawalNotification(
+                    $amount,
+                    'savings goal: ' . $goal->name
+                ));
+            });
         });
     }
 

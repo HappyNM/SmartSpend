@@ -1,6 +1,6 @@
-<div class="min-h-screen bg-gray-50">
+<div class="min-h-screen bg-gray-50 dark:bg-neutral-900">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-blue-600 to-cyan-600 shadow-lg">
+    <div class="bg-blue-700 dark:bg-blue-900 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div class="flex items-center justify-between">
                 <div>
@@ -20,9 +20,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         @if (session()->has('message'))
-            <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center justify-between">
+            <div class="mb-6 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 px-4 py-3 rounded-lg flex items-center justify-between">
                 <span>{{ session('message') }}</span>
-                <button onclick="this.parentElement.remove()" class="text-green-600 hover:text-green-800">
+                <button onclick="this.parentElement.remove()" class="text-green-600 dark:text-green-300 hover:text-green-800 dark:hover:text-green-100">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
@@ -32,11 +32,11 @@
 
         <!-- Stats -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border-l-4 border-blue-500">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-gray-600 mb-1">Active Recurring</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $recurringExpenses->count() }}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">Active Recurring</p>
+                        <p class="text-3xl font-bold text-gray-900 dark:text-gray-100">{{ $recurringExpenses->count() }}</p>
                     </div>
                     <div class="p-3 bg-blue-100 rounded-lg">
                         <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,11 +46,11 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border-l-4 border-purple-500">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-gray-600 mb-1">Monthly Total</p>
-                        <p class="text-3xl font-bold text-gray-900">
+                        <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">Monthly Total</p>
+                        <p class="text-3xl font-bold text-gray-900 dark:text-gray-100">
                             ${{ number_format($recurringExpenses->where('recurring_frequency', 'monthly')->sum('amount'), 2) }}
                         </p>
                     </div>
@@ -62,11 +62,11 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border-l-4 border-green-500">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-gray-600 mb-1">Generated This Month</p>
-                        <p class="text-3xl font-bold text-gray-900">
+                        <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">Generated This Month</p>
+                        <p class="text-3xl font-bold text-gray-900 dark:text-gray-100">
                             {{ $recurringExpenses->sum(function($expense) { 
                                 return $expense->childExpenses()->whereMonth('date', now()->month)->whereYear('date', now()->year)->count(); 
                             }) }}
@@ -85,11 +85,11 @@
         @if($recurringExpenses->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($recurringExpenses as $expense)
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition">
                         <!-- Card Header -->
-                        <div class="p-6 {{ $expense->category ? '' : 'bg-gradient-to-r from-gray-500 to-gray-600' }}" 
+                        <div class="p-6 {{ $expense->category ? '' : 'bg-gray-600' }}" 
                              @if($expense->category)
-                                style="background: linear-gradient(135deg, {{ $expense->category->color }} 0%, {{ $expense->category->color }}dd 100%);"
+                                @style(['background-color: ' . $expense->category->color])
                              @endif>
                             <div class="flex items-start justify-between">
                                 <div class="flex-1">
@@ -121,45 +121,45 @@
                         <div class="p-6 space-y-4">
                             <!-- Amount -->
                             <div class="flex items-center justify-between">
-                                <span class="text-gray-600">Amount</span>
-                                <span class="text-2xl font-bold text-gray-900">${{ number_format($expense->amount, 2) }}</span>
+                                <span class="text-gray-600 dark:text-gray-300">Amount</span>
+                                <span class="text-2xl font-bold text-gray-900 dark:text-gray-100">${{ number_format($expense->amount, 2) }}</span>
                             </div>
 
                             <!-- Frequency Badge -->
                             <div class="flex items-center justify-between">
-                                <span class="text-gray-600">Frequency</span>
+                                <span class="text-gray-600 dark:text-gray-300">Frequency</span>
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                                     {{ ucfirst($expense->recurring_frequency) }}
                                 </span>
                             </div>
 
                             <!-- Dates -->
-                            <div class="space-y-2 pt-2 border-t border-gray-200">
+                            <div class="space-y-2 pt-2 border-t border-gray-200 dark:border-gray-700">
                                 <div class="flex items-center justify-between text-sm">
-                                    <span class="text-gray-600">Starts</span>
-                                    <span class="font-medium text-gray-900">
+                                    <span class="text-gray-600 dark:text-gray-300">Starts</span>
+                                    <span class="font-medium text-gray-900 dark:text-gray-100">
                                         {{ $expense->recurring_start_date->format('M d, Y') }}
                                     </span>
                                 </div>
                                 @if($expense->recurring_end_date)
                                     <div class="flex items-center justify-between text-sm">
-                                        <span class="text-gray-600">Ends</span>
-                                        <span class="font-medium text-gray-900">
+                                        <span class="text-gray-600 dark:text-gray-300">Ends</span>
+                                        <span class="font-medium text-gray-900 dark:text-gray-100">
                                             {{ $expense->recurring_end_date->format('M d, Y') }}
                                         </span>
                                     </div>
                                 @else
                                     <div class="flex items-center justify-between text-sm">
-                                        <span class="text-gray-600">Ends</span>
-                                        <span class="font-medium text-gray-600">Never</span>
+                                        <span class="text-gray-600 dark:text-gray-300">Ends</span>
+                                        <span class="font-medium text-gray-600 dark:text-gray-300">Never</span>
                                     </div>
                                 @endif
                             </div>
 
                             <!-- Generated Count -->
-                            <div class="pt-2 border-t border-gray-200">
+                            <div class="pt-2 border-t border-gray-200 dark:border-gray-700">
                                 <div class="flex items-center justify-between text-sm">
-                                    <span class="text-gray-600">Total Generated</span>
+                                    <span class="text-gray-600 dark:text-gray-300">Total Generated</span>
                                     <span class="font-bold text-purple-600">
                                         {{ $expense->childExpenses->count() }} expenses
                                     </span>
@@ -167,8 +167,8 @@
                             </div>
 
                             @if($expense->description)
-                                <div class="pt-2 border-t border-gray-200">
-                                    <p class="text-sm text-gray-600">{{ $expense->description }}</p>
+                                <div class="pt-2 border-t border-gray-200 dark:border-gray-700">
+                                    <p class="text-sm text-gray-600 dark:text-gray-300">{{ $expense->description }}</p>
                                 </div>
                             @endif
                         </div>
@@ -177,17 +177,17 @@
             </div>
         @else
             <!-- Empty State -->
-            <div class="bg-white rounded-xl shadow-md p-12 text-center">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-12 text-center">
                 <div class="flex justify-center mb-4">
-                    <div class="p-4 bg-blue-100 rounded-full">
+                    <div class="p-4 bg-blue-100 dark:bg-blue-900/30 rounded-full">
                         <svg class="w-16 h-16 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">No Recurring Expenses Yet</h3>
-                <p class="text-gray-600 mb-6">Set up recurring expenses like subscriptions, rent, or utilities to track them automatically.</p>
-                <a href="/expenses/create" class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition">
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">No Recurring Expenses Yet</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-6">Set up recurring expenses like subscriptions, rent, or utilities to track them automatically.</p>
+                <a href="/expenses/create" class="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 hover:shadow-lg transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>

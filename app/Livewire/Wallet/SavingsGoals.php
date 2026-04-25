@@ -19,8 +19,11 @@ class SavingsGoals extends Component
     public string $description = '';
     public string $lock_type = 'time';
     public string $target_amount = '';
+    public string $lock_goal_id = '';
+    public string $lock_amount = '';
     public ?string $lock_until = null;
     public bool $allow_partial_withdrawal = true;
+
 
     protected function rules(): array
     {
@@ -65,29 +68,49 @@ class SavingsGoals extends Component
     }
 
     public function createGoal(WalletService $walletService): void
-{
-    $this->validate();
+    {
+        $this->validate();
 
-    try {
-        $walletService->createGoal(
-            Auth::id(),
-            $this->name,
-            $this->description ?: null,
-            $this->lock_type,
-            $this->target_amount !== '' ? (float) $this->target_amount : null,
-            $this->lock_until,
-            $this->allow_partial_withdrawal
-        );
+        try {
+            $walletService->createGoal(
+                Auth::id(),
+                $this->name,
+                $this->description ?: null,
+                $this->lock_type,
+                $this->target_amount !== '' ? (float) $this->target_amount : null,
+                $this->lock_until,
+                $this->allow_partial_withdrawal
+            );
 
-        $this->reset(['name', 'description', 'target_amount', 'lock_until']);
-        $this->lock_type = 'time';
-        $this->allow_partial_withdrawal = true;
+            $this->reset(['name', 'description', 'target_amount', 'lock_until']);
+            $this->lock_type = 'time';
+            $this->allow_partial_withdrawal = true;
 
-        session()->flash('message', 'Savings goal created successfully.');
-    } catch (RuntimeException $e) {
-        $this->addError('name', $e->getMessage());
+            session()->flash('message', 'Savings goal created successfully.');
+        } catch (RuntimeException $e) {
+            $this->addError('name', $e->getMessage());
+        }
     }
-}
+    public function lockFunds(WalletService $walletService): void
+    {
+        $this->validate([
+            'lock_goal_id' => ['required', 'integer', 'exists:savings_goals,id'],
+            'lock_amount' => ['required', 'numeric', 'min:1'],
+        ]);
+
+        try {
+            $walletService->lockFundsToGoal(
+                Auth::id(),
+                (int) $this->lock_goal_id,
+                (float) $this->lock_amount
+            );
+
+            $this->reset(['lock_goal_id', 'lock_amount']);
+            session()->flash('message', 'Funds locked successfully.');
+        } catch (RuntimeException $e) {
+            $this->addError('lock_amount', $e->getMessage());
+        }
+    }
 
     public function render()
     {
@@ -95,5 +118,4 @@ class SavingsGoals extends Component
             'goals' => $this->goals,
         ]);
     }
-    
 }

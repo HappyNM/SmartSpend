@@ -9,7 +9,7 @@
                     </h1>
                     <p class="text-gray-600 dark:text-gray-300 mt-1">{{ $isEdit ? 'Update your budget details' : 'Set spending limits for better financial control' }}</p>
                 </div>
-                <a href="/budgets" class="text-gray-600 hover:text-gray-900 transition">
+                <a href="/budgets" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
@@ -19,6 +19,17 @@
     </div>
 
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        @if (session()->has('ai-error'))
+            <div class="mb-6 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 px-4 py-3 rounded-lg flex items-center justify-between">
+                <span>{{ session('ai-error') }}</span>
+                <button type="button" onclick="this.parentElement.remove()" class="text-amber-600 dark:text-amber-300 hover:text-amber-800 dark:hover:text-amber-100">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        @endif
         
         <form wire:submit="save" class="space-y-6">
             
@@ -105,7 +116,7 @@
                     <!-- Amount -->
                     <div>
                         <div class="flex items-center justify-between mb-2">
-                            <label for="amount" class="block text-sm font-medium text-gray-700">
+                            <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
                                 Budget Amount <span class="text-red-500">*</span>
                             </label>
                             
@@ -115,7 +126,7 @@
                                         wire:click="getAIRecommendation"
                                         wire:loading.attr="disabled"
                                         wire:target="getAIRecommendation"
-                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-sm font-medium rounded-lg hover:shadow-lg transition disabled:opacity-50">
+                                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 hover:shadow-lg transition disabled:opacity-50">
                                     <svg wire:loading.remove wire:target="getAIRecommendation" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
                                     </svg>
@@ -136,10 +147,10 @@
                             <input type="number" 
                                    id="amount"
                                    wire:model="amount" 
-                                   step="0.01"
+                                          step="0.01"
                                    min="0"
-                                   placeholder="0.00"
-                                   class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg @error('amount') border-red-500 @enderror">
+                                placeholder="0"
+                                   class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg @error('amount') border-red-500 @enderror">
                         </div>
                         @error('amount')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -148,7 +159,7 @@
 
                     <!-- AI Recommendation Panel -->
                     @if($showAIRecommendation && $aiRecommendation)
-                        <div class="relative bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 border-2 border-purple-200 rounded-xl p-6 shadow-lg">
+                        <div class="relative bg-purple-50 dark:bg-gray-700 border-2 border-purple-200 dark:border-purple-700 rounded-xl p-6 shadow-lg">
                             <!-- Close Button -->
                             <button type="button"
                                     wire:click="closeAIRecommendation"
@@ -160,7 +171,7 @@
 
                             <!-- AI Badge -->
                             <div class="flex items-center gap-2 mb-4">
-                                <div class="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full text-sm font-semibold">
+                                <div class="flex items-center gap-2 px-3 py-1.5 bg-indigo-600 text-white rounded-full text-sm font-semibold">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
                                     </svg>
@@ -196,21 +207,21 @@
                             </div>
 
                             <!-- Explanation -->
-                            <div class="bg-white rounded-lg p-4 mb-3">
-                                <p class="text-sm text-gray-800 leading-relaxed">
+                            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 mb-3">
+                                <p class="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
                                     <strong class="text-purple-700">Why this amount:</strong> {{ $aiRecommendation['explanation'] }}
                                 </p>
                             </div>
 
                             <!-- Tip -->
-                            <div class="bg-white rounded-lg p-4 border-l-4 border-green-500">
+                            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border-l-4 border-green-500">
                                 <div class="flex items-start gap-3">
                                     <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                                     </svg>
                                     <div>
                                         <p class="text-xs font-semibold text-green-900 mb-1">💡 Pro Tip</p>
-                                        <p class="text-sm text-gray-700">{{ $aiRecommendation['tip'] }}</p>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">{{ $aiRecommendation['tip'] }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -219,11 +230,11 @@
 
                     <!-- Preview Card -->
                     @if($amount && $month && $year)
-                        <div class="p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg border-2 border-indigo-200">
+                        <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg border-2 border-indigo-200 dark:border-indigo-700">
                             <p class="text-sm font-medium text-indigo-900 mb-2">Budget Preview:</p>
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-2xl font-bold text-indigo-900">${{ number_format($amount, 2) }}</p>
+                                    <p class="text-2xl font-bold text-indigo-900">${{ $amount }}</p>
                                     <p class="text-sm text-indigo-700">
                                         {{ $category_id ? $categories->find($category_id)->name : 'Overall Budget' }}
                                     </p>
@@ -233,7 +244,7 @@
                                         {{ \Carbon\Carbon::create($year, $month, 1)->format('F Y') }}
                                     </p>
                                     <p class="text-xs text-indigo-600 mt-1">
-                                        ≈ ${{ number_format($amount / 30, 2) }}/day
+                                        ≈ ${{ number_format((float) $amount / 30, 2) }}/day
                                     </p>
                                 </div>
                             </div>
@@ -271,7 +282,7 @@
                     Cancel
                 </a>
                 <button type="submit" 
-                        class="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                        class="px-8 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 hover:shadow-lg transition transform hover:-translate-y-0.5 flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                     </svg>
@@ -286,25 +297,25 @@
             <div class="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Budget Examples</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="p-4 bg-gray-50 rounded-lg">
-                        <p class="font-semibold text-gray-900 mb-2">🍔 Food & Dining</p>
-                        <p class="text-sm text-gray-600">Recommended: $400-600/month</p>
-                        <p class="text-xs text-gray-500 mt-1">Includes groceries, restaurants, and coffee</p>
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <p class="font-semibold text-gray-900 dark:text-gray-100 mb-2">🍔 Food & Dining</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Recommended: $400-600/month</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Includes groceries, restaurants, and coffee</p>
                     </div>
-                    <div class="p-4 bg-gray-50 rounded-lg">
-                        <p class="font-semibold text-gray-900 mb-2">🚗 Transportation</p>
-                        <p class="text-sm text-gray-600">Recommended: $200-400/month</p>
-                        <p class="text-xs text-gray-500 mt-1">Gas, insurance, maintenance, public transit</p>
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <p class="font-semibold text-gray-900 dark:text-gray-100 mb-2">🚗 Transportation</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Recommended: $200-400/month</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Gas, insurance, maintenance, public transit</p>
                     </div>
-                    <div class="p-4 bg-gray-50 rounded-lg">
-                        <p class="font-semibold text-gray-900 mb-2">🎬 Entertainment</p>
-                        <p class="text-sm text-gray-600">Recommended: $100-200/month</p>
-                        <p class="text-xs text-gray-500 mt-1">Movies, concerts, hobbies, subscriptions</p>
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <p class="font-semibold text-gray-900 dark:text-gray-100 mb-2">🎬 Entertainment</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Recommended: $100-200/month</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Movies, concerts, hobbies, subscriptions</p>
                     </div>
-                    <div class="p-4 bg-gray-50 rounded-lg">
-                        <p class="font-semibold text-gray-900 mb-2">🛒 Shopping</p>
-                        <p class="text-sm text-gray-600">Recommended: $150-300/month</p>
-                        <p class="text-xs text-gray-500 mt-1">Clothes, electronics, household items</p>
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <p class="font-semibold text-gray-900 dark:text-gray-100 mb-2">🛒 Shopping</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Recommended: $150-300/month</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Clothes, electronics, household items</p>
                     </div>
                 </div>
                 <p class="text-xs text-gray-500 mt-4 text-center">

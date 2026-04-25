@@ -6,7 +6,37 @@
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
         @include('livewire.wallet-partials.goal-form')
     </div>
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+    <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Move Funds to Locked Savings</h2>
+    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+        Available Balance: KES {{ number_format($this->wallet->available_balance, 2) }}
+    </p>
 
+    <form wire:submit="lockFunds" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div>
+            <label class="block text-sm text-gray-700 dark:text-gray-300 mb-1">Goal</label>
+            <select wire:model="lock_goal_id" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 dark:text-gray-100">
+                <option value="">Select goal</option>
+                @foreach($goals as $goal)
+                    <option value="{{ $goal->id }}">{{ $goal->name }}</option>
+                @endforeach
+            </select>
+            @error('lock_goal_id') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+        </div>
+
+        <div>
+            <label class="block text-sm text-gray-700 dark:text-gray-300 mb-1">Amount (KES)</label>
+            <input wire:model="lock_amount" type="number" step="0.01" min="1" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 dark:text-gray-100">
+            @error('lock_amount') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+        </div>
+
+        <div class="flex items-end">
+            <button type="submit" class="w-full px-4 py-2 rounded-lg bg-emerald-600 text-white font-semibold">
+                Lock Funds
+            </button>
+        </div>
+    </form>
+</div>
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Your Goals</h2>
 

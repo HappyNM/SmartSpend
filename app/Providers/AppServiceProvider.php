@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Expense;
+use App\Observers\ExpenseObserver;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+
+        Expense::observe(ExpenseObserver::class);
     }
 
     /**
