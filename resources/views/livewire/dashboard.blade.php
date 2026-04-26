@@ -249,15 +249,35 @@
             'categoryColors' => $expenseByCategory->pluck('color')->values(),
         ]) !!}
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
-        document.addEventListener('livewire:navigated',function(){
+        function renderDashboardCharts() {
+            if (!window.Chart) {
+                return;
+            }
+
             const chartDataElement = document.getElementById('dashboard-chart-data');
+            const trendCanvas = document.getElementById('monthlyTrendChart');
+            const categoryCanvas = document.getElementById('categoryChart');
+
+            if (!chartDataElement || !trendCanvas || !categoryCanvas) {
+                return;
+            }
+
             const chartData = JSON.parse(chartDataElement?.textContent || '{}');
 
+            window.smartSpendCharts = window.smartSpendCharts || {};
+
+            if (window.smartSpendCharts.monthlyTrend) {
+                window.smartSpendCharts.monthlyTrend.destroy();
+            }
+
+            if (window.smartSpendCharts.category) {
+                window.smartSpendCharts.category.destroy();
+            }
+
             // monthly Trend chart
-            const trendCtx = document.getElementById('monthlyTrendChart').getContext('2d');
-            new Chart(trendCtx, {
+            const trendCtx = trendCanvas.getContext('2d');
+            window.smartSpendCharts.monthlyTrend = new window.Chart(trendCtx, {
                 type: 'line',
                 data: {
                     labels: chartData.monthlyLabels || [],
@@ -295,8 +315,8 @@
                 }
             });
             // category Pie chart
-            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-            new Chart(categoryCtx, {
+            const categoryCtx = categoryCanvas.getContext('2d');
+            window.smartSpendCharts.category = new window.Chart(categoryCtx, {
                 type: 'doughnut',
                 data: {
                     labels: chartData.categoryLabels || [],
@@ -317,7 +337,20 @@
                     }
                 }
             });
+        }
 
+        document.addEventListener('DOMContentLoaded', renderDashboardCharts);
+        document.addEventListener('livewire:navigated', renderDashboardCharts);
+        document.addEventListener('livewire:updated', renderDashboardCharts);
+
+        document.addEventListener('livewire:init', () => {
+            if (!window.Livewire) {
+                return;
+            }
+
+            window.Livewire.on('dashboard-data-updated', () => {
+                renderDashboardCharts();
+            });
         });
     </script>
 </div>

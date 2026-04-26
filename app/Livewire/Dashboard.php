@@ -93,6 +93,8 @@ class Dashboard extends Component
         $this->recurringExpenseCount = Expense::forUser($userId)
             ->recurring()
             ->count();
+
+        $this->dispatch('dashboard-data-updated');
     }
 
     public function updatedSelectedMonth(){
