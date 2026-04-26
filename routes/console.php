@@ -10,7 +10,7 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('expense-generate-recurring-expense')
+Schedule::command('expenses:generate-recurring-expense')
 ->daily('00:00')
 ->withoutOverlapping()
 ->onSuccess(function(){
