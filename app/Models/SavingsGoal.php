@@ -54,7 +54,7 @@ class SavingsGoal extends Model
     public function isUnlocked(): bool
     {
         if ($this->lock_type === 'amount' && $this->target_amount !== null) {
-            return bccomp((string) $this->current_amount, (string) $this->target_amount, 2) >= 0;
+            return $this->compareAmounts((string) $this->current_amount, (string) $this->target_amount) >= 0;
         }
 
         if ($this->lock_type === 'time' && $this->lock_until !== null) {
@@ -63,7 +63,7 @@ class SavingsGoal extends Model
 
         if ($this->lock_type === 'time_and_amount') {
             $amountReached = $this->target_amount !== null
-                && bccomp((string) $this->current_amount, (string) $this->target_amount, 2) >= 0;
+                && $this->compareAmounts((string) $this->current_amount, (string) $this->target_amount) >= 0;
 
             $timeReached = $this->lock_until !== null
                 && now()->greaterThanOrEqualTo($this->lock_until);
@@ -72,5 +72,18 @@ class SavingsGoal extends Model
         }
 
         return false;
+    }
+
+    private function compareAmounts(string $left, string $right): int
+    {
+        if (function_exists('bccomp')) {
+            return bccomp($left, $right, 2);
+        }
+
+        // Fallback for environments without BCMath: compare rounded cents.
+        $leftCents = (int) round(((float) $left) * 100);
+        $rightCents = (int) round(((float) $right) * 100);
+
+        return $leftCents <=> $rightCents;
     }
 }
