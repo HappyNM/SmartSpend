@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     $middleware->validateCsrfTokens(except: [
         'mpesa/callback/stk',
     ]);
+    $middleware->append(\App\Http\Middleware\SetContentSecurityPolicy::class);
 })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
