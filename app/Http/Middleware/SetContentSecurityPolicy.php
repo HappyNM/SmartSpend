@@ -17,7 +17,7 @@ class SetContentSecurityPolicy
     {
         $response = $next($request);
 
-        $csp = "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.bunny.net https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; font-src 'self' https://fonts.bunny.net https://fonts.gstatic.com;";
+        $csp = "default-src 'self'; base-uri 'self'; frame-ancestors 'self'; style-src 'self' 'unsafe-inline' https://fonts.bunny.net https://fonts.googleapis.com; style-src-elem 'self' 'unsafe-inline' https://fonts.bunny.net https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src-elem 'self' 'unsafe-inline' 'unsafe-eval'; font-src 'self' https://fonts.bunny.net https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https:;";
 
         $response->headers->set('Content-Security-Policy', $csp);
 
