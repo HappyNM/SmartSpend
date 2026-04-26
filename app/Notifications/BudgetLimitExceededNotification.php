@@ -4,15 +4,11 @@ namespace App\Notifications;
 
 use App\Models\Budget;
 use App\Models\Expense;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BudgetLimitExceededNotification extends Notification implements ShouldQueue
+class BudgetLimitExceededNotification extends Notification
 {
-    use Queueable;
-
     public function __construct(
         private readonly Budget $budget,
         private readonly Expense $expense,
