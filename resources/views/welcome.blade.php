@@ -5,7 +5,7 @@
 </head>
 <body class="min-h-screen bg-stone-50 text-stone-900 antialiased dark:bg-neutral-950 dark:text-stone-100">
     <div class="relative overflow-hidden">
-        <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,_#fbbf24_0%,_transparent_40%),,linear-gradient(180deg,_#fffbeb_0%,_#f5f5f4_60%,_#fafaf9_100%)] dark:bg-[radial-gradient(circle_at_top_right,_#78350f_0%,_transparent_45%),linear-gradient(180deg,_#0a0a0a_0%,_#171717_60%,_#0f0f0f_100%)]"></div>
+        <div class="absolute inset-0 -z-10 bg-radial-gradient(circle_at_20%_20%,_#14b8a6_0%,_transparent_35%),linear-gradient(180deg,_#fffbeb_0%,_#f5f5f4_60%,_#fafaf9_100%)] dark:bg-radial-gradient(circle_at_20%_20%,_#0f766e_0%,_transparent_35%),linear-gradient(180deg,_#0a0a0a_0%,_#171717_60%,_#0f0f0f_100%)]"></div>
 
         <header class="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 lg:px-8">
             <div class="flex items-center gap-3">
