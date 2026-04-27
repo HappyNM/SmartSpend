@@ -10,6 +10,7 @@ use App\Models\WalletTransaction;
 use App\Notifications\FundsLockedNotification;
 use App\Notifications\WalletWithdrawalNotification;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use RuntimeException;
 use Throwable;
 
@@ -139,6 +140,17 @@ class WalletService
                         (string) $goal->name
                     ));
                 } catch (Throwable $e) {
+                    $context = [
+                        'user_id' => $userId,
+                        'amount' => $amount,
+                        'goal_id' => $goal->id,
+                        'goal_name' => $goal->name,
+                        'exception' => $e::class,
+                        'message' => $e->getMessage(),
+                    ];
+
+                    Log::error('Failed to send funds locked notification email.', $context);
+                    Log::channel('stderr')->error('Failed to send funds locked notification email.', $context);
                     report($e);
                 }
             });
@@ -187,6 +199,15 @@ class WalletService
                         'available balance'
                     ));
                 } catch (Throwable $e) {
+                    $context = [
+                        'user_id' => $userId,
+                        'amount' => $amount,
+                        'exception' => $e::class,
+                        'message' => $e->getMessage(),
+                    ];
+
+                    Log::error('Failed to send available balance withdrawal notification email.', $context);
+                    Log::channel('stderr')->error('Failed to send available balance withdrawal notification email.', $context);
                     report($e);
                 }
             });
@@ -246,6 +267,17 @@ class WalletService
                         'savings goal: ' . $goal->name
                     ));
                 } catch (Throwable $e) {
+                    $context = [
+                        'user_id' => $userId,
+                        'amount' => $amount,
+                        'goal_id' => $goal->id,
+                        'goal_name' => $goal->name,
+                        'exception' => $e::class,
+                        'message' => $e->getMessage(),
+                    ];
+
+                    Log::error('Failed to send savings goal withdrawal notification email.', $context);
+                    Log::channel('stderr')->error('Failed to send savings goal withdrawal notification email.', $context);
                     report($e);
                 }
             });
