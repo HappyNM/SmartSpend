@@ -43,12 +43,24 @@ return [
                 $scheme = env('MAIL_SCHEME');
 
                 if (! empty($scheme)) {
+                    if ($scheme === 'ssl') {
+                        return 'smtps';
+                    }
+
+                    if ($scheme === 'tls' || $scheme === 'starttls') {
+                        return 'smtp';
+                    }
+
                     return $scheme;
                 }
 
                 $encryption = env('MAIL_ENCRYPTION');
 
-                return $encryption === 'ssl' ? 'smtps' : $encryption;
+                return match ($encryption) {
+                    'ssl' => 'smtps',
+                    'tls', 'starttls' => 'smtp',
+                    default => $encryption,
+                };
             })(),
             'url' => env('MAIL_URL'),
             'host' => env('MAIL_HOST', '127.0.0.1'),

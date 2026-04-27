@@ -2,21 +2,15 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class WalletWithdrawalNotification extends Notification implements ShouldQueue
+class WalletWithdrawalNotification extends Notification
 {
-    use Queueable;
-
     public function __construct(
         private readonly float $amount,
         private readonly string $source,
     ) {
-        $this->onConnection('database');
-        $this->onQueue('notifications');
     }
 
     public function via(object $notifiable): array
