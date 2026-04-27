@@ -2,15 +2,23 @@
 
 namespace App\Notifications;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class WalletWithdrawalNotification extends Notification
+class WalletWithdrawalNotification extends Notification implements ShouldQueue
 {
+    use Queueable;
+
+    public int $tries = 5;
+
     public function __construct(
         private readonly float $amount,
         private readonly string $source,
     ) {
+        $this->onConnection('database');
+        $this->onQueue('notifications');
     }
 
     public function via(object $notifiable): array
@@ -28,5 +36,10 @@ class WalletWithdrawalNotification extends Notification
             ->line('Source: ' . ucfirst($this->source))
             ->action('View Wallet', url('/wallet'))
             ->line('If this was not you, please review your account activity immediately.');
+    }
+
+    public function backoff(): array
+    {
+        return [60, 300, 900, 1800];
     }
 }

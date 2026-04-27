@@ -2,16 +2,24 @@
 
 namespace App\Notifications;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class FundsLockedNotification extends Notification
+class FundsLockedNotification extends Notification implements ShouldQueue
 {
+    use Queueable;
+
+    public int $tries = 5;
+
     public function __construct(
         private readonly float $amount,
         private readonly string $lockType,
         private readonly string $goalName,
     ) {
+        $this->onConnection('database');
+        $this->onQueue('notifications');
     }
 
     public function via(object $notifiable): array
@@ -32,5 +40,10 @@ class FundsLockedNotification extends Notification
             ->line('Goal: ' . $this->goalName)
             ->action('View Savings Goals', url('/wallet/goals'))
             ->line('Thank you for using SmartSpend.');
+    }
+
+    public function backoff(): array
+    {
+        return [60, 300, 900, 1800];
     }
 }

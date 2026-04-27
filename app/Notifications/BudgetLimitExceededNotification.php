@@ -4,16 +4,24 @@ namespace App\Notifications;
 
 use App\Models\Budget;
 use App\Models\Expense;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BudgetLimitExceededNotification extends Notification
+class BudgetLimitExceededNotification extends Notification implements ShouldQueue
 {
+    use Queueable;
+
+    public int $tries = 5;
+
     public function __construct(
         private readonly Budget $budget,
         private readonly Expense $expense,
         private readonly float $spentAmount,
     ) {
+        $this->onConnection('database');
+        $this->onQueue('notifications');
     }
 
     public function via(object $notifiable): array
@@ -38,5 +46,10 @@ class BudgetLimitExceededNotification extends Notification
             ->line('Latest expense: ' . $this->expense->title . ' ($' . number_format((float) $this->expense->amount, 2) . ')')
             ->action('Review Budgets', url('/budgets'))
             ->line('Consider adjusting your spending or updating your budget.');
+    }
+
+    public function backoff(): array
+    {
+        return [60, 300, 900, 1800];
     }
 }
