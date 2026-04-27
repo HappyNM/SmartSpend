@@ -4,16 +4,22 @@ namespace App\Notifications;
 
 use App\Models\Budget;
 use App\Models\Expense;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BudgetLimitExceededNotification extends Notification
+class BudgetLimitExceededNotification extends Notification implements ShouldQueue
 {
+    use Queueable;
+
     public function __construct(
         private readonly Budget $budget,
         private readonly Expense $expense,
         private readonly float $spentAmount,
     ) {
+        $this->onConnection('database');
+        $this->onQueue('notifications');
     }
 
     public function via(object $notifiable): array
