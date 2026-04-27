@@ -11,7 +11,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('expenses:generate-recurring-expense')
-->daily('00:00')
+->everyTenMinutes()
 ->withoutOverlapping()
 ->onSuccess(function(){
     Log::info("Recurring expense generated successfully");
