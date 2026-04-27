@@ -11,6 +11,7 @@ use App\Notifications\FundsLockedNotification;
 use App\Notifications\WalletWithdrawalNotification;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
+use Throwable;
 
 class WalletService
 {
@@ -131,11 +132,15 @@ class WalletService
                     return;
                 }
 
-                $user->notify(new FundsLockedNotification(
-                    $amount,
-                    (string) $goal->lock_type,
-                    (string) $goal->name
-                ));
+                try {
+                    $user->notify(new FundsLockedNotification(
+                        $amount,
+                        (string) $goal->lock_type,
+                        (string) $goal->name
+                    ));
+                } catch (Throwable $e) {
+                    report($e);
+                }
             });
         });
     }
@@ -176,10 +181,14 @@ class WalletService
                     return;
                 }
 
-                $user->notify(new WalletWithdrawalNotification(
-                    $amount,
-                    'available balance'
-                ));
+                try {
+                    $user->notify(new WalletWithdrawalNotification(
+                        $amount,
+                        'available balance'
+                    ));
+                } catch (Throwable $e) {
+                    report($e);
+                }
             });
         });
     }
@@ -231,10 +240,14 @@ class WalletService
                     return;
                 }
 
-                $user->notify(new WalletWithdrawalNotification(
-                    $amount,
-                    'savings goal: ' . $goal->name
-                ));
+                try {
+                    $user->notify(new WalletWithdrawalNotification(
+                        $amount,
+                        'savings goal: ' . $goal->name
+                    ));
+                } catch (Throwable $e) {
+                    report($e);
+                }
             });
         });
     }
