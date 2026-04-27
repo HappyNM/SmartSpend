@@ -134,11 +134,24 @@ class WalletService
                 }
 
                 try {
+                    Log::channel('stderr')->info('Sending funds locked notification email.', [
+                        'user_id' => $userId,
+                        'to' => $user->email,
+                        'name' => $user->name,
+                        'amount' => $amount,
+                        'goal_id' => $goal->id,
+                    ]);
+
                     $user->notify(new FundsLockedNotification(
                         $amount,
                         (string) $goal->lock_type,
                         (string) $goal->name
                     ));
+
+                    Log::channel('stderr')->info('Funds locked notification email sent.', [
+                        'user_id' => $userId,
+                        'to' => $user->email,
+                    ]);
                 } catch (Throwable $e) {
                     $context = [
                         'user_id' => $userId,
@@ -194,10 +207,22 @@ class WalletService
                 }
 
                 try {
+                    Log::channel('stderr')->info('Sending available balance withdrawal notification email.', [
+                        'user_id' => $userId,
+                        'to' => $user->email,
+                        'name' => $user->name,
+                        'amount' => $amount,
+                    ]);
+
                     $user->notify(new WalletWithdrawalNotification(
                         $amount,
                         'available balance'
                     ));
+
+                    Log::channel('stderr')->info('Available balance withdrawal notification email sent.', [
+                        'user_id' => $userId,
+                        'to' => $user->email,
+                    ]);
                 } catch (Throwable $e) {
                     $context = [
                         'user_id' => $userId,
@@ -262,10 +287,24 @@ class WalletService
                 }
 
                 try {
+                    Log::channel('stderr')->info('Sending savings goal withdrawal notification email.', [
+                        'user_id' => $userId,
+                        'to' => $user->email,
+                        'name' => $user->name,
+                        'amount' => $amount,
+                        'goal_id' => $goal->id,
+                        'goal_name' => $goal->name,
+                    ]);
+
                     $user->notify(new WalletWithdrawalNotification(
                         $amount,
                         'savings goal: ' . $goal->name
                     ));
+
+                    Log::channel('stderr')->info('Savings goal withdrawal notification email sent.', [
+                        'user_id' => $userId,
+                        'to' => $user->email,
+                    ]);
                 } catch (Throwable $e) {
                     $context = [
                         'user_id' => $userId,
