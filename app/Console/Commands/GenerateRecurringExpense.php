@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 
 #[Signature('expenses:generate-recurring-expense')]
-#[Description('Genreate recurring expenses based on their schedule')]
+#[Description('Generate recurring expenses based on their schedule')]
 class GenerateRecurringExpense extends Command
 {
     /**
@@ -34,7 +34,7 @@ class GenerateRecurringExpense extends Command
         $this->info("Successfully generated {$generatedCount} recurring expenses.");
         
         Log::info("Generated {$generatedCount} recurring expenses", [
-            'command' => 'expenses:generate-recurring',
+            'command' => 'expenses:generate-recurring-expense',
             'timestamp' => now(),
         ]);
 
