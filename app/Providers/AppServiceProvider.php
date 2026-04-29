@@ -17,9 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        if (! class_exists('Resend', false)) {
-            require_once base_path('vendor/resend/resend-php/src/Resend.php');
-        }
+        //
     }
 
     /**
